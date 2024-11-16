@@ -37,6 +37,10 @@ builder.Services.AddGrpcClient<CommentGrpcClient>(opts =>
 builder.Services.AddTransient<IPostService, PostService>();
 builder.Services.AddTransient<ICommentService, CommentService>();
 
+builder.Services.AddHttpClient<IRecommenderService, RecommenderService>(
+    client => client.BaseAddress = new Uri(builder.Configuration["RecommenderUrl"] + "/recommend")
+);
+
 builder.Services.AddAutoMapper(typeof(GrpcMappingProfile));
 
 const string scheme = JwtBearerDefaults.AuthenticationScheme;

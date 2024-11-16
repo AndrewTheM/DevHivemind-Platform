@@ -18,4 +18,9 @@ public class PostPageService : IPostPageService
     {
         return _apiClient.SendGetApiRequestAsync<Post>($"postpage/{titleIdentifier}");
     }
+
+    public Task<List<Post>> GetRecommendedPosts()
+    {
+        return _apiClient.SendGetApiRequestAsync<List<Post>>($"postpage/recommend");
+    }
 }
