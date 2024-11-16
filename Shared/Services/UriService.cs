@@ -26,7 +26,8 @@ public class UriService : IUriService
                 ["author"] = filter.Author,
                 ["year"] = filter.Year.ToString(),
                 ["month"] = filter.Month.ToString(),
-                ["day"] = filter.Day.ToString()
+                ["day"] = filter.Day.ToString(),
+                ["tag"] = filter.Tag
             };
         }
 

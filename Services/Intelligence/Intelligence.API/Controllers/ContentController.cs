@@ -39,6 +39,10 @@ public class ContentController : ControllerBase
         {
             return Ok(Responses.ModerationProblem(ex.Message));
         }
+        catch (HttpRequestException)
+        {
+            return Ok(Responses.ServiceUnavailable);
+        }
     }
     
     [HttpPost("comment")]
@@ -57,6 +61,10 @@ public class ContentController : ControllerBase
         catch (ContentNotAllowedException ex)
         {
             return Ok(Responses.ModerationProblem(ex.Message));
+        }
+        catch (HttpRequestException)
+        {
+            return Ok(Responses.ServiceUnavailable);
         }
     }
 }
