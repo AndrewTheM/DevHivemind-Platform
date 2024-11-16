@@ -6,7 +6,7 @@ namespace Posts.DataAccess.Repositories.Contracts;
 
 public interface IPostRepository : IRepository<Post>
 {
-    Task<IQueryable<Post>> GetNewestPostsWithAuthorsAndTagsAsync();
+    Task<IQueryable<Post>> GetNewestPostsAsync();
 
     Task<IQueryable<Post>> GetFilteredPostsAsync(PostFilter filter);
 
@@ -35,4 +35,5 @@ public interface IPostRepository : IRepository<Post>
     /// if no post with given <paramref name="id"/> is found.
     /// </summary>
     Task<double> CalculatePostRatingAsync(Guid id);
+    Task<IQueryable<Post>> GetManyByIds(IEnumerable<Guid> ids);
 }

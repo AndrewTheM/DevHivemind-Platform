@@ -153,6 +153,16 @@ public class PostService : IPostService
         var post = await _unitOfWork.Posts.GetByIdAsync(id);
         return post.AuthorId == userId;
     }
+    
+    public async Task<IEnumerable<PostResponse>> FindManyPostsAsync(IEnumerable<Guid> ids)
+    {
+        var posts = await _unitOfWork.Posts.GetManyByIds(ids);
+        var postList = await posts.ToListAsync();
+        var responseList = _mapper.Map<List<Post>, List<PostResponse>>(postList);
+
+        responseList.ForEach(AddRelativeTimeToResponse);
+        return responseList;
+    }
 
     private void AddRelativeTimeToResponse(PostResponse response)
     {

@@ -31,12 +31,22 @@ public class PostGrpcService : Protos.PostGrpc.PostGrpcBase
             post = await _postService.GetCompletePostAsync(request.TitleIdentifier);
             await _cache.SetAsync(request.TitleIdentifier, post, options: new()
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1),
-                SlidingExpiration = TimeSpan.FromSeconds(30),
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2),
+                SlidingExpiration = TimeSpan.FromSeconds(1),
             });
         }
 
         var response = _mapper.Map<Protos.CompletePostResponse>(post);
+        return response;
+    }
+
+    public async override Task<Protos.ManyPostsResponse> GetManyPosts(
+        Protos.ManyPostsRequest request, ServerCallContext context)
+    {
+        var ids = _mapper.Map<IEnumerable<Protos.Guid>, IEnumerable<Guid>>(request.Ids);
+        var posts = await _postService.FindManyPostsAsync(ids);
+        var postModels = _mapper.Map<IEnumerable<PostResponse>, IEnumerable<Protos.PostModel>>(posts);
+        var response = new Protos.ManyPostsResponse { Posts = { postModels } };
         return response;
     }
 }

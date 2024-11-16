@@ -53,4 +53,5 @@ public interface IPostService
     /// if no post with given <paramref name="id"/> is found.
     /// </summary>
     Task<bool> CheckIsPostAuthorAsync(Guid id, Guid userId);
+    Task<IEnumerable<PostResponse>> FindManyPostsAsync(IEnumerable<Guid> ids);
 }

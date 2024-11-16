@@ -27,7 +27,7 @@ public class TagController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IEnumerable<string>> GetTags()
     {
-        var tags = await _unitOfWork.Tags.GetRelevantTagsAsync();
+        var tags = await _unitOfWork.Tags.GetAllAsync();
         return tags.Select(t => t.TagName);
     }
 

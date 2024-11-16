@@ -11,6 +11,9 @@ public class GrpcMappingProfile : Profile
     {
         CreateMap<Guid, Protos.Guid>()
             .ConvertUsing(src => new Protos.Guid { Value = src.ToString() });
+        
+        CreateMap<Protos.Guid, Guid>()
+            .ConvertUsing(src => Guid.Parse(src.Value));
 
         CreateMap<DateTime, Timestamp>()
             .ConvertUsing(src => Timestamp.FromDateTime(DateTime.SpecifyKind(src, DateTimeKind.Utc)));
@@ -19,5 +22,9 @@ public class GrpcMappingProfile : Profile
             .ForMember(dest => dest.Author, opts => opts.NullSubstitute(string.Empty))
             .ForMember(dest => dest.ThumbnailPath, opts => opts.NullSubstitute(string.Empty))
             .ForMember(dest => dest.AudioPath, opts => opts.NullSubstitute(string.Empty));
+
+        CreateMap<PostResponse, Protos.PostModel>()
+            .ForMember(dest => dest.Author, opts => opts.NullSubstitute(string.Empty))
+            .ForMember(dest => dest.ThumbnailPath, opts => opts.NullSubstitute(string.Empty));
     }
 }
