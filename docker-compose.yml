@@ -47,6 +47,12 @@ services:
       context: .
       dockerfile: Services/Intelligence/Intelligence.API/Dockerfile
 
+  recommender.api:
+    image: ${DOCKER_REGISTRY-}recommenderapi
+    build:
+      context: .
+      dockerfile: Services/Recommender/Dockerfile
+
   aggregator:
     image: ${DOCKER_REGISTRY-}aggregator
     build:
