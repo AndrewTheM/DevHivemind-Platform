@@ -10,12 +10,13 @@
 
 @inject ISnackbar _snackbar
 
+@inject IConfiguration _config
 @inject NavigationManager _navigationManager 
 @inject IStringLocalizer<AddPost> _locale
 
 <AuthorBar />
 
-<div class="px-5 bg-white">
+<div class="post-form px-5">
     <MudBreadcrumbs Items="breadcrumbItems" Separator=">" />
     <MudText Class="mb-4" Typo="Typo.h5">@_locale["NewPost"]</MudText>
     <EditForm Model="newPost" OnValidSubmit="PublishPost">
@@ -23,7 +24,7 @@
 
         <MudTextField
             @bind-Value="newPost.Title"
-            Class="bg-white mt-4 mb-2"
+            Class="mt-4 mb-2"
             Label="@_locale["TitleLabel"]"
             Variant="Variant.Outlined"
             Margin="Margin.Dense"
@@ -32,7 +33,7 @@
 
         <MudTextField
             @bind-Value="newPost.Content"
-            Class="bg-white mt-3 mb-2"
+            Class="mt-3 mb-2"
             Label="@_locale["ContentLabel"]"
             Variant="Variant.Outlined"
             Margin="Margin.Dense"
@@ -42,7 +43,7 @@
 
         <MudTextField
             @bind-Value="tagsLine"
-            Class="bg-white mt-3 mb-2"
+            Class="mt-3 mb-2"
             Style="width: 200px;"
             Label="@_locale["TagsLabel"]"
             Adornment="Adornment.End"
@@ -177,7 +178,14 @@
                 newPost.ThumbnailPath = await _fileService.PublishFileAsync(currentThumbnail);
             }
 
-            newPost.AudioPath = await SynthesizeAudio(newPost.Content);
+            // HACK: rework
+            try
+            {
+                newPost.AudioPath = await SynthesizeAudio(newPost.Content);
+            }
+            catch
+            {
+            }
 
             var publishedPost = await _postService.PublishPostAsync(newPost);
             await _postService.SetTagsOfPostAsync(publishedPost.Id, newPost.Tags);
@@ -196,17 +204,13 @@
     async Task<string> SynthesizeAudio(string text)
     {
         var speechConfig = SpeechConfig.FromSubscription("905a50ca1a0240a6a37bf5bacd93d299", "northeurope");
-
-        if (CultureInfo.CurrentCulture.Name == "en-US")
+        speechConfig.SpeechSynthesisVoiceName = CultureInfo.CurrentCulture.Name switch
         {
-            speechConfig.SpeechSynthesisVoiceName = "en-US-JennyNeural";
-        }
-        else
-        {
-            speechConfig.SpeechSynthesisVoiceName = "uk-UA-PolinaNeural";
-        }
+            "uk-UA" => "uk-UA-PolinaNeural",
+            _ => "en-US-JennyNeural"
+        };
 
-        using var synthesizer = new SpeechSynthesizer(speechConfig, null);
+        using var synthesizer = new SpeechSynthesizer(speechConfig, audioConfig: null);
         var result = await synthesizer.SpeakTextAsync(text);
         return await _fileService.PublishFileAsync("post.wav", result.AudioData);
     }

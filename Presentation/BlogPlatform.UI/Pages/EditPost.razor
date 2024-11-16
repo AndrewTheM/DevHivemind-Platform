@@ -12,7 +12,7 @@
 
 <AuthorBar />
 
-<div class="px-5 bg-white">
+<div class="px-5">
     <MudBreadcrumbs Items="breadcrumbItems" Separator=">" />
     <MudText Class="mb-4" Typo="Typo.h5">@_locale["EditPost"]</MudText>
     <EditForm Model="currentPost" OnValidSubmit="UpdatePost">
@@ -20,7 +20,7 @@
 
         <MudTextField
             @bind-Value="currentPost.Title"
-            Class="bg-white mt-4 mb-2"
+            Class="mt-4 mb-2"
             Label="@_locale["TitleLabel"]"
             Variant="Variant.Outlined"
             Margin="Margin.Dense"
@@ -29,7 +29,7 @@
 
         <MudTextField
             @bind-Value="currentPost.Content"
-            Class="bg-white mt-3 mb-2"
+            Class="mt-3 mb-2"
             Label="@_locale["ContentLabel"]"
             Variant="Variant.Outlined"
             Margin="Margin.Dense"
@@ -39,7 +39,7 @@
 
         <MudTextField
             @bind-Value="tagsLine"
-            Class="bg-white mt-3 mb-2"
+            Class="mt-3 mb-2"
             Style="width: 200px;"
             Label="@_locale["TagsLabel"]"
             Adornment="Adornment.End"

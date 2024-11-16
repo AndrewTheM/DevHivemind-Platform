@@ -9,7 +9,6 @@ article {
 }
 
 main.container {
-    color: #212529;
     font-family: Lora, 'Times New Roman', serif;
 }
 
@@ -24,6 +23,6 @@ main.container {
 }
 
 .comment-message {
-    color: #272727;
+    text-align: justify;
     font-size: 17px;
 }

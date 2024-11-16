@@ -1,9 +1,9 @@
 ﻿@inject IStringLocalizer<NavMenu> _locale
 
-<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top" id="mainNav">
     <div class="container-fluid">
         <NavLink class="navbar-brand" href="/" Match="NavLinkMatch.All">
-            The Hivemind
+            <span class="emphasized">Dev</span> Hivemind
         </NavLink>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                 data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
@@ -58,7 +58,7 @@
             </ul>
 
             <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
-                <LanguageMenu IconColor="Color.Tertiary" />
+                <LanguageMenu IconColor="Color.Default" />
             </MudHidden>
             <MudHidden Breakpoint="Breakpoint.MdAndUp">
                 <LanguageMenu IconColor="Color.Default" />
