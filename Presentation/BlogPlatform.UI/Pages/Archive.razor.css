@@ -1,0 +1,8 @@
+﻿header.masthead {
+    background-image: url('images/bg.jpg');
+}
+
+.post-preview > .post-meta {
+    font-style: normal;
+    font-family: Lora, 'Times New Roman', serif;
+}

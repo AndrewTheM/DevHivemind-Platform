@@ -117,28 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="About" xml:space="preserve">
-    <value>Про сайт</value>
+  <data name="LoadMore" xml:space="preserve">
+    <value>Завантажити більше</value>
   </data>
-  <data name="Archive" xml:space="preserve">
-    <value>Архів</value>
+  <data name="PostedBy" xml:space="preserve">
+    <value>Опубліковано користувачем</value>
   </data>
-  <data name="Author" xml:space="preserve">
-    <value>Автор</value>
+  <data name="SearchPosts" xml:space="preserve">
+    <value>Пошук публікацій</value>
   </data>
-  <data name="Contact" xml:space="preserve">
-    <value>Контакти</value>
-  </data>
-  <data name="ForYou" xml:space="preserve">
-    <value>Для вас</value>
-  </data>
-  <data name="Menu" xml:space="preserve">
-    <value>Меню</value>
-  </data>
-  <data name="Profile" xml:space="preserve">
-    <value>Мій профіль</value>
-  </data>
-  <data name="SignIn" xml:space="preserve">
-    <value>Вхід</value>
+  <data name="Tags" xml:space="preserve">
+    <value>Мітки</value>
   </data>
 </root>

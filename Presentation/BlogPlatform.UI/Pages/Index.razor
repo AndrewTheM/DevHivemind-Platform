@@ -2,10 +2,8 @@
 
 @using BlogPlatform.UI.Models
 
-@inject IPostService _postService
 @inject IPostPageService _postPageService
 @inject IFileService _fileService
-@inject ITagService _tagService
 
 @inject IStringLocalizer<Index> _locale
 
@@ -13,113 +11,35 @@
 
 <main class="content">
     <div class="container-fluid">
-        @if (currentPage is not null)
+        @if (recommendedPosts is not null)
         {
             <div class="row pa-5">
-                <div class="col-lg-1" />
-                <div class="col-sm" id="posts">
-                    @foreach (Models.Post post in loadedPosts)
+                <div class="col-lg-3" />
+                <div class="col-sm">
+                    @foreach (Models.Post post in recommendedPosts)
                     {
-                        <MudPaper Class="post-preview mb-4 pa-4" Outlined="true" Elevation="2">
-                            <NavLink href="@($"post/{post.TitleIdentifier}")">
-                                <h2 class="post-title my-2">
-                                    @post.Title
-                                </h2>
-                            </NavLink>
-                            <p class="post-meta">
-                                @_locale["PostedBy"] @post.Author @post.RelativePublishTime
-                            </p>
-                            <img class="img-fluid" src="@_fileService.GetImageUrl(post.ThumbnailPath)" alt="">
-                        </MudPaper>
-                    }
-                    <div class="row justify-content-center">
-                        <MudButton Class="mt-4" @onclick="GoToNextPage" Color="Color.Primary"
-                               Variant="Variant.Filled" Size="Size.Medium"
-                               Disabled="isLoadingPosts">
-                            Load More
-
-                            @if (isLoadingPosts)
-                            {
-                                <MudProgressCircular Class="ml-2" Indeterminate="true" Size="Size.Small" />
-                            }
-                        </MudButton>
-                    </div>
-                    @*@if (currentPage.TotalPages > 1)
-                    {
-                        <div class="mt-5">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item @(currentPage.PreviousPage is null ? "disabled" : "")">
-                                    <a class="page-link" href="#posts" @onclick="GoToPreviousPage">
-                                        ⯇
-                                    </a>
-                                </li>
-
-                                @for (int i = currentPage.PageNumber; i <= currentPage.PageNumber + 3; i++)
-                                {
-                                    int j = i;
-                                    <li class="page-item @(currentPage.PageNumber == j ? "active" : "")">
-                                        <a class="page-link" href="#posts" @onclick="async () => await GoToPage(j)">@i</a>
-                                    </li>
-                                }
-
-                                <li class="page-item disabled">
-                                    <a class="page-link">...</a>
-                                </li>
-
-                                @for (int i = currentPage.TotalPages - 5; i <= currentPage.TotalPages - 1; i++)
-                                {
-                                    int j = i;
-                                    <li class="page-item @(currentPage.PageNumber == j ? "active" : "")">
-                                        <a class="page-link" href="#posts" @onclick="async () => await GoToPage(j)">@i</a>
-                                    </li>
-                                }
-
-                                <li class="page-item @(currentPage.NextPage is null ? "disabled" : "")">
-                                    <a class="page-link" href="#posts" @onclick="GoToNextPage">
-                                        ⯈
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    }*@
-                </div>
-                <div class="col-lg-1"></div>
-                <div class="col-lg-4 mt-md-0 mt-5">
-                    <MudPaper Class="pa-4 position-fixed" Style="margin-right: 100px;" Outlined="true" Elevation="2">
-                        <MudTextField
-                            @bind-Value="searchQuery"
-                            OnKeyUp="DetectEnterOnSearch"
-                            OnAdornmentClick="SearchPosts"
-                            Label="@_locale["SearchPosts"]"
-                            Variant="Variant.Outlined"
-                            Margin="Margin.Dense"
-                            Adornment="Adornment.End"
-                            AdornmentIcon="@Icons.Filled.Search" />
-
-                        <p class="h5 mb-3">@_locale["Tags"]</p>
-                        <div class="d-flex flex-wrap font-weight-bold">
-                            <MudChipSet SelectedChip="selectedTagChip" SelectedChipChanged="SearchByTagChip">
-                                @foreach (string tag in tags)
-                                {
-                                    <MudChip Text="@tag" />
-                                }
-                            </MudChipSet>
-                        </div>
-
-                        @*<p class="h5 mb-3">Recommended for you</p>
-                        @foreach (var post in recommendedPosts)
-                        {
-                            <div class="my-4">
-                                <NavLink href="@($"/post/{post.TitleIdentifier}")">
-                                    @post.Title
-                                </NavLink>
-                                <div class="mt-1 text-muted">
-                                    @_locale["TrendingBy"] @post.Author
+                        <NavLink href="@($"post/{post.TitleIdentifier}")" class="text-decoration-none">
+                            <MudPaper Class="post-preview row align-items-center mb-5 pa-5" Outlined="true" Elevation="2">
+                                <div class="col">
+                                    <p class="post-meta">
+                                        @post.Author
+                                    </p>
+                                    <h2 class="post-title my-2">
+                                        @post.Title
+                                    </h2>
+                                    <p class="post-meta">
+                                        @post.RelativePublishTime
+                                    </p>
                                 </div>
-                            </div>
-                        }*@
-                    </MudPaper>
+                                <div class="col-sm-1" />
+                                <div class="col-sm-4 align-content-center">
+                                    <img class="img-fluid" src="@_fileService.GetImageUrl(post.ThumbnailPath)" alt="">
+                                </div>
+                            </MudPaper>
+                        </NavLink>
+                    }
                 </div>
+                <div class="col-lg-3" />
             </div>
         }
     </div>
@@ -128,86 +48,10 @@
 <Footer />
 
 @code {
-    Page<Models.Post> currentPage;
-    List<Models.Post> loadedPosts;
-
-    bool isLoadingPosts;
-
-    string searchQuery;
-    MudChip selectedTagChip;
     List<Models.Post> recommendedPosts;
-    List<string> tags;
 
     protected override async Task OnInitializedAsync()
     {
-        loadedPosts = new();
-        await LoadPosts();
         recommendedPosts = await _postPageService.GetRecommendedPosts();
-        tags = await _tagService.GetTagNames();
-    }
-
-    async Task LoadPosts(int pageNumber = 1, int pageSize = 10)
-    {
-        isLoadingPosts = true;
-        currentPage = await _postService.GetPostsAsync(
-            pageNumber,
-            pageSize,
-            title: searchQuery,
-            tag: selectedTagChip?.Text);
-
-        loadedPosts.AddRange(currentPage.Data);
-        isLoadingPosts = false;
-    }
-
-    async Task LoadPosts(string pageUrl)
-    {
-        isLoadingPosts = true;
-        currentPage = await _postService.GetPostsAsync(pageUrl);
-        loadedPosts.AddRange(currentPage.Data);
-        isLoadingPosts = false;
-    }
-
-    Task GoToPreviousPage()
-    {
-        if (currentPage?.PreviousPage is null)
-            return Task.CompletedTask;
-
-        return LoadPosts(currentPage.PreviousPage);
-    }
-
-    Task GoToPage(int pageNumber)
-    {
-        if (currentPage is null || currentPage.PageNumber == pageNumber)
-            return Task.CompletedTask;
-
-        return LoadPosts(pageNumber, currentPage.PageSize);
-    }
-
-    Task GoToNextPage()
-    {
-        if (currentPage?.NextPage is null)
-            return Task.CompletedTask;
-
-        return LoadPosts(currentPage.NextPage);
-    }
-
-    Task SearchPosts()
-    {
-        loadedPosts = new();
-        return LoadPosts();
-    }
-
-    Task DetectEnterOnSearch(KeyboardEventArgs e)
-    {
-        if (e.Code != "Enter" && e.Code != "NumpadEnter")
-            return Task.CompletedTask;
-
-        return SearchPosts();
-    }
-
-    Task SearchByTagChip(MudChip chip)
-    {
-        selectedTagChip = chip;
-        return SearchPosts();
     }
 }
