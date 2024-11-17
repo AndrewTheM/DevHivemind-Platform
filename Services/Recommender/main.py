@@ -42,7 +42,7 @@ def recommend_blogs(model, data, user_id, top_k):
         
         # Get top-k blog recommendations
         top_k_pred = predictions.topk(k=min(top_k, len(non_interacted_blogs)), largest=True)
-        recommended_blogs = non_interacted_blogs[top_k_pred.indices]
+        recommended_blogs = all_blogs[top_k_pred.indices]
         
     return recommended_blogs.tolist()
 
@@ -55,6 +55,7 @@ def load_mappings(path):
 def map_key_by_value(map, value):
     return next((k for k, v in map.items() if v == value), None)
 
+
 @app.get('/recommend', response_model=list[str])
 async def get_recommendations_for_user(user_id: str, top_k: int):
     graph_data = torch.load(GRAPH_DATA)
@@ -65,7 +66,7 @@ async def get_recommendations_for_user(user_id: str, top_k: int):
     model = GNNRecommender(input_dim=graph_data.x.shape[1], hidden_dim=HIDDEN_DIM, output_dim=1)
     model.load_state_dict(model_state)
     
-    user_id = map_key_by_value(user_mappings, user_id) or 0
+    user_id = int(map_key_by_value(user_mappings, user_id) or 0)
     recommended_blogs = recommend_blogs(model, graph_data, user_id, top_k)
     
     blog_ids = [blog_mappings[str(id)] for id in recommended_blogs]
