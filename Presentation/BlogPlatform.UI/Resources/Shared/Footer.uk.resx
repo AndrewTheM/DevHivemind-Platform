@@ -117,34 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ChangeThumbnail" xml:space="preserve">
-    <value>Сменить изображение</value>
+  <data name="Copyright" xml:space="preserve">
+    <value>Всі права захищено</value>
   </data>
-  <data name="ContentLabel" xml:space="preserve">
-    <value>Содержимое</value>
-  </data>
-  <data name="FileBytes" xml:space="preserve">
-    <value>Б</value>
-  </data>
-  <data name="NewPost" xml:space="preserve">
-    <value>Новая публикация</value>
-  </data>
-  <data name="Posts" xml:space="preserve">
-    <value>Публикации</value>
-  </data>
-  <data name="Publish" xml:space="preserve">
-    <value>Опубликовать</value>
-  </data>
-  <data name="PublishError" xml:space="preserve">
-    <value>Во время публикации возникла ошибка.</value>
-  </data>
-  <data name="TagsLabel" xml:space="preserve">
-    <value>Теги</value>
-  </data>
-  <data name="TitleLabel" xml:space="preserve">
-    <value>Заголовок</value>
-  </data>
-  <data name="UploadThumbnail" xml:space="preserve">
-    <value>Загрузить изображение</value>
+  <data name="InitialThemeBy" xml:space="preserve">
+    <value>Розмітка на основі</value>
   </data>
 </root>

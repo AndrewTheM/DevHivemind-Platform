@@ -1,10 +1,12 @@
-﻿<footer class="container">
+﻿@inject IStringLocalizer<Footer> _locale
+
+<footer class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
             <p class="copyright">
-                Copyright © Dev Hivemind, @DateTime.Now.Year
+                @_locale["Copyright"] © Dev Hivemind, @DateTime.Now.Year
                 <br>
-                Initial theme by
+                @_locale["InitialThemeBy"]
                 <a href="https://github.com/StartBootstrap/startbootstrap-clean-blog" target="_blank">
                     Start Bootstrap
                 </a>
