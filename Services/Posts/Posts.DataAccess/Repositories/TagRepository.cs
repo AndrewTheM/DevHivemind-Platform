@@ -12,10 +12,10 @@ public class TagRepository : EntityRepository<Tag>, ITagRepository
     {
     }
 
-    public async Task<IEnumerable<Tag>> GetRelevantTagsAsync()
+    public Task<IQueryable<Tag>> GetRelevantTagsAsync()
     {
-        var tags = await _set.Include(t => t.Posts).ToListAsync();
-        return tags.Where(t => t.Posts != null && t.Posts.Any());
+        var tags = _set.Where(t => t.Posts.Any());
+        return Task.FromResult(tags);
     }
 
     public async Task<Tag> GetTagByNameAsync(string name)

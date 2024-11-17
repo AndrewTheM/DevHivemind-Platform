@@ -185,9 +185,12 @@ services:
       - GrpcSettings:CommentsUrl=http://comments.api:8080
       - ElasticSearch=http://elasticsearch:9200
       - RecommenderUrl=http://recommender.api
+      - Redis=rediscache:6379
     depends_on:
       - posts.api
       - comments.api
+      - recommender.api
+      - rediscache
       - elasticsearch
     ports:
       - 8009:80

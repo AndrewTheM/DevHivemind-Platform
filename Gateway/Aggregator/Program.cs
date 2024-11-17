@@ -16,6 +16,11 @@ builder.Host.UseSerilog(SerilogHelpers.Configure);
 
 builder.Services.AddScoped<LoggingDelegatingHandler>();
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration["Redis"];
+});
+
 builder.Services.AddGrpcClient<PostGrpcClient>(opts =>
 {
     string apiUrl = builder.Configuration["GrpcSettings:PostsUrl"];
