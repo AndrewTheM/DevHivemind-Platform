@@ -23,16 +23,16 @@
     </Router>
 </CascadingAuthenticationState>
 
-<MudThemeProvider Theme="TertiaryWhite" />
+<MudThemeProvider IsDarkMode="true" Theme="CustomTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 @code {
-    MudTheme TertiaryWhite = new()
+    MudTheme CustomTheme = new()
     {
         Palette = new()
         {
-            Tertiary = "#FFF"
+            Primary = "#05a7c4"
         }
     };
 }

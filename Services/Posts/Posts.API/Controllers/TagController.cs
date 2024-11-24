@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Posts.API.Extensions;
 using Posts.BusinessLogic.DTO.Requests;
 using Posts.BusinessLogic.DTO.Responses;
 using Posts.DataAccess.Context.Contracts;
@@ -15,20 +17,35 @@ public class TagController : ControllerBase
 {
     private readonly IBloggingUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IDistributedCache _cache;
 
-    public TagController(IBloggingUnitOfWork unitOfWork, IMapper mapper)
+    public TagController(IBloggingUnitOfWork unitOfWork, IMapper mapper, IDistributedCache cache)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _cache = cache;
     }
 
     [HttpGet]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IEnumerable<string>> GetTags()
+    public async Task<ActionResult<IEnumerable<string>>> GetTags()
     {
-        var tags = await _unitOfWork.Tags.GetRelevantTagsAsync();
-        return tags.Select(t => t.TagName);
+        var cacheKey = "tags";
+        var tags = await _cache.GetAsync<List<string>>(cacheKey);
+
+        if (tags is null)
+        {
+            var relevantTags = await _unitOfWork.Tags.GetRelevantTagsAsync();
+            tags = relevantTags.Select(t => t.TagName).ToList();
+            await _cache.SetAsync(cacheKey, tags, options: new()
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1),
+                SlidingExpiration = TimeSpan.FromMinutes(30),
+            });
+        }
+
+        return Ok(tags);
     }
 
     [HttpGet("{id}")]

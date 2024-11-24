@@ -10,6 +10,8 @@ namespace Intelligence.API.Services;
 
 public class ContentService : IContentService
 {
+    const int contentRequestLimit = 1000;
+
     private readonly HttpClient _httpClient;
 
     public ContentService(HttpClient httpClient)
@@ -19,7 +21,6 @@ public class ContentService : IContentService
 
     public async Task CheckTextContentAsync(string content, string contentSource)
     {
-        const int contentRequestLimit = 1000;
         for (var i = 0; i < content.Length; i += contentRequestLimit)
         {
             var chunkLength = Math.Min(content.Length - i, contentRequestLimit);
@@ -51,6 +52,8 @@ public class ContentService : IContentService
         };
 
         var response = await _httpClient.SendAsync(httpMessage);
+        response.EnsureSuccessStatusCode();
+
         var contentResponse = await response.Content.ReadFromJsonAsync<ContentSafetyResponse>();
         var categories = contentResponse.CategoryResults
             .Where(cr => cr.Severity > 0)

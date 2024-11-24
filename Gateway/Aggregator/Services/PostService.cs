@@ -24,4 +24,15 @@ public class PostService : IPostService
         var post = _mapper.Map<CompletePostDto>(response);
         return post;
     }
+
+    public async Task<IEnumerable<PostDto>> GetManyPostsAsync(IEnumerable<Guid> ids)
+    {
+        var request = new Protos.ManyPostsRequest
+        {
+            Ids = { _mapper.Map<IEnumerable<Guid>, IEnumerable<Protos.Guid>>(ids) }
+        };
+        var response = await _client.GetManyPostsAsync(request);
+        var posts = _mapper.Map<IEnumerable<Protos.PostModel>, IEnumerable<PostDto>>(response.Posts);
+        return posts;
+    }
 }

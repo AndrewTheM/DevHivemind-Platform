@@ -7,6 +7,7 @@ option csharp_namespace = "BlogPlatform.Shared.GRPC.Protos";
 
 service PostGrpc {
 	rpc GetCompletePost(CompletePostRequest) returns (CompletePostResponse);
+    rpc GetManyPosts(ManyPostsRequest) returns (ManyPostsResponse);
 }
 
 message CompletePostRequest {
@@ -26,4 +27,22 @@ message CompletePostResponse {
     double rating = 10;
     repeated string tags = 11;
     string audioPath = 12;
+}
+
+message ManyPostsRequest {
+    repeated Guid ids = 1;
+}
+
+message ManyPostsResponse {
+    repeated PostModel posts = 1;
+}
+
+message PostModel {
+	Guid id = 1;
+    string title = 2;
+    string titleIdentifier = 3;
+    string author = 4;
+    google.protobuf.Timestamp publishedOn = 5;
+    string relativePublishTime = 6;
+    string thumbnailPath = 7;
 }

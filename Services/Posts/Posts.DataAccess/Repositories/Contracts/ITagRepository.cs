@@ -5,7 +5,7 @@ namespace Posts.DataAccess.Repositories.Contracts;
 
 public interface ITagRepository : IRepository<Tag>
 {
-    Task<IEnumerable<Tag>> GetRelevantTagsAsync();
+    Task<IQueryable<Tag>> GetRelevantTagsAsync();
 
     /// <summary>
     /// Throws <see cref="EntityNotFoundException"/>

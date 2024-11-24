@@ -13,32 +13,46 @@ public class PostRepository : EntityRepository<Post>, IPostRepository
     {
     }
 
-    public Task<IQueryable<Post>> GetNewestPostsWithAuthorsAndTagsAsync()
+    public Task<IQueryable<Post>> GetNewestPostsAsync()
     {
-        var posts = _set.Include(p => p.Tags)
-            .OrderByDescending(p => p.CreatedOn)
-            .AsQueryable();
-
+        var posts = _set.OrderByDescending(p => p.CreatedOn).AsQueryable();
         return Task.FromResult(posts);
     }
 
     public async Task<IQueryable<Post>> GetFilteredPostsAsync(PostFilter filter)
     {
-        var posts = await GetNewestPostsWithAuthorsAndTagsAsync();
+        var posts = await GetNewestPostsAsync();
 
-        if (filter is null)
-            return posts;
+        if (filter.Title is not null)
+            posts = posts.Where(p => p.Title.Contains(filter.Title));
+        
+        if (filter.Author is not null)
+            posts = posts.Where(p => p.Author == filter.Author);
 
-        return posts.Where(p => filter.Title == null || p.Title.Contains(filter.Title))
-            .Where(p => filter.Author == null || p.Author == filter.Author)
-            .Where(p => filter.Year == null || p.CreatedOn.Year == filter.Year.Value)
-            .Where(p => filter.Month == null || p.CreatedOn.Month == filter.Month.Value)
-            .Where(p => filter.Day == null || p.CreatedOn.Day == filter.Day.Value)
-            .Where(p => filter.Tag == null || p.Tags.Any(t => t.TagName == filter.Tag));
+        if (filter.Year is not null)
+            posts = posts.Where(p => p.CreatedOn.Year == filter.Year.Value);
+        
+        if (filter.Month is not null)
+            posts = posts.Where(p => p.CreatedOn.Month == filter.Month.Value);
+
+        if (filter.Day is not null)
+            posts = posts.Where(p => p.CreatedOn.Day == filter.Day.Value);
+
+        if (filter.Tag is not null)
+            posts = posts.Where(p => p.Tags.Any(t => t.TagName == filter.Tag));
+
+        return posts;
+    }
+
+    public Task<IQueryable<Post>> GetManyByIds(IEnumerable<Guid> ids)
+    {
+        var posts = _set.Where(p => ids.Contains(p.Id));
+        return Task.FromResult(posts);
     }
 
     public Task<IQueryable<Post>> GetTopRatedPostsWithAuthorsAsync(int count)
     {
+        // TODO: optimize
         var posts = _set.Include(p => p.Ratings)
             .OrderByDescending(p => p.Ratings.Average(r => r.RatingValue))
             .Take(count);

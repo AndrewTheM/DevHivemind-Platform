@@ -66,7 +66,7 @@ internal class Startup
         services.AddLocalization(opt => opt.ResourcesPath = "Resources");
         services.Configure<RequestLocalizationOptions>(opts =>
         {
-            var supportedCultures = new List<CultureInfo> { new("en"), new("uk"), new("ru") };
+            var supportedCultures = new List<CultureInfo> { new("en"), new("uk") };
             opts.DefaultRequestCulture = new RequestCulture("en", "en");
             opts.SupportedCultures = supportedCultures;
             opts.SupportedUICultures = supportedCultures;

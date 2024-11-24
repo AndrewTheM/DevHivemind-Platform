@@ -120,14 +120,17 @@
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
-  <data name="AllPosts" xml:space="preserve">
-    <value>All posts</value>
+  <data name="Archive" xml:space="preserve">
+    <value>Archive</value>
   </data>
   <data name="Author" xml:space="preserve">
     <value>Author</value>
   </data>
   <data name="Contact" xml:space="preserve">
     <value>Contact</value>
+  </data>
+  <data name="ForYou" xml:space="preserve">
+    <value>For You</value>
   </data>
   <data name="Menu" xml:space="preserve">
     <value>Menu</value>

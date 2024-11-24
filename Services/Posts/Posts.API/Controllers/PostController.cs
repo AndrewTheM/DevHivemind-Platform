@@ -44,8 +44,8 @@ public class PostController : ControllerBase
             posts = await _postService.GetPageOfPostsAsync(filter);
             await _cache.SetAsync(cacheKey, posts, options: new()
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1),
-                SlidingExpiration = TimeSpan.FromSeconds(30),
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+                SlidingExpiration = TimeSpan.FromMinutes(2),
             });
         }
 
@@ -119,6 +119,20 @@ public class PostController : ControllerBase
         }
 
         return Ok(post);
+    }
+
+    [HttpPost("many")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<IEnumerable<PostResponse>>> ManyPosts([FromBody] IEnumerable<Guid> ids)
+    {
+        var idList = ids.ToList();
+        if (idList.Count > 10)
+            return BadRequest();
+
+        var posts = await _postService.FindManyPostsAsync(idList);
+        return Ok(posts);
     }
 
     [HttpPost]

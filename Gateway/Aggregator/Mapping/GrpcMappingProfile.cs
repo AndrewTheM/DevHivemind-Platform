@@ -22,6 +22,7 @@ public class GrpcMappingProfile : Profile
         CreateMap<Protos.CommentModel, CommentDto>();
         CreateMap<Protos.CommentPageResponse, Page<CommentDto>>();
         
+        CreateMap<Protos.PostModel, PostDto>();
         CreateMap<Protos.CompletePostResponse, CompletePostDto>();
     }
 }
