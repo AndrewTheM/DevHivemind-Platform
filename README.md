@@ -1,11 +1,12 @@
-# Blog Platform "The Hivemind"
+# "Dev Hivemind" - Platform for Knowledge Sharing and Publishing
 
 **Distributed .NET Application**
 
 Based on microservice architecture.
-Containerized with Docker Compose.
+Containerized via Docker Compose.
 Uses IdentityServer4 as identity provider.
 Integrates Azure Cognitive Services for AI functionality.
+Implements a recommender system with Python/PyTorch.
 
 To run, execute the following commands with Docker CLI:
 
@@ -18,11 +19,13 @@ docker compose up -d
 ```
 
 Core features:
+- post recommendations
+- post archive
 - post publishing
 - comment thread
 - post tagging
 - post ratings
-- automoderation with AI
+- automated moderation with AI
 - post TTS
 
 Project structure:
@@ -47,6 +50,7 @@ Services
     - IdentityServer
  6. Intelligence
     - API
+ 7. Recommender
 
 Gateway
 1. Aggregator
